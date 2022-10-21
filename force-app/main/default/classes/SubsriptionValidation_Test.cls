@@ -73,4 +73,28 @@ private class SubsriptionValidation_Test {
         System.debug(SubscriptionSelector.getExistingSubscriptionsByCustomerAndFarmId(new Set<Id>{contact.Id}, new Set<Id>{farm.Id}));
         //then
     }
+
+    @IsTest
+    static void itShouldInsertRecordIntegration(){
+        //integration test for the happy path
+        //given
+        Contact contact = new Contact(FirstName = 'Test', LastName = 'Contact');
+        Solar_Farm__c solarFarm = new Solar_Farm__c();
+        insert new List<SObject>{contact, solarFarm};
+        insert new Subscription__c(Start_Date__c = Date.newInstance(2021, 01, 01),
+                Expiration_Date__c = Date.newInstance(2021, 12, 31),
+                Customer__c = contact.Id, Solar_Farm__c = solarFarm.Id);
+        //when
+        Subscription__c newSubscription = new Subscription__c(Start_Date__c = Date.today(), Expiration_Date__c = Date.today().addDays(30),
+                Customer__c = contact.Id, Solar_Farm__c = solarFarm.Id);
+        insert newSubscription;
+        // then
+        Subscription__c updatedSubscription = [SELECT Id, Customer__c, Solar_Farm__c
+        FROM Subscription__c
+        WHERE Start_Date__c =: Date.today() LIMIT 1];
+        Assert.isTrue(updatedSubscription.Customer__c == contact.Id, 'It should been inserted with the ' +
+                'correct contact Id');
+        Assert.isTrue(updatedSubscription.Solar_Farm__c == solarFarm.Id, 'It should have been inserted ' +
+                'with the correct solar farm Id');
+    }
 }
