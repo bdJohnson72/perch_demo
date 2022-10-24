@@ -12,7 +12,17 @@ public with sharing class SubscriptionTriggerHandler extends TriggerHandler {
         this.subscriptionSelector = new SubscriptionSelector();
     }
 
-    public override void validateBeforeInsert() {
+
+    protected override void beforeInsert() {
+      validateBeforeInsert();
+    }
+
+
+    protected override void beforeUpdate() {
+        validateBeforeUpdate();
+    }
+
+    private  void validateBeforeInsert() {
         List<Subscription__c> existingSubscriptions = this.subscriptionSelector.getExistingSubscriptionsByCustomerAndFarmId(
                 CollectionUtilities.buildIdsSet(Trigger.new, Subscription__c.Customer__c),
                 CollectionUtilities.buildIdsSet(Trigger.new, Subscription__c.Solar_Farm__c)
@@ -23,7 +33,7 @@ public with sharing class SubscriptionTriggerHandler extends TriggerHandler {
     }
 
 
-    public override void validateBeforeUpdate() {
+    private void validateBeforeUpdate() {
         List<Subscription__c> recordsToProcess = filterForChangedSubscriptionDates((List<Subscription__c>) Trigger.new,
                 (Map<Id, Subscription__c>) Trigger.oldMap);
         if (!recordsToProcess.isEmpty()) {

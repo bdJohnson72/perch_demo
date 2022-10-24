@@ -25,9 +25,9 @@ public with sharing class SubscriptionUpdateBatch implements Database.Batchable<
     private  void updateStatus(List<Subscription__c> subscriptions) {
         for(Subscription__c subscription : subscriptions) {
             if (subscription.Start_Date__c == Date.today()) {
-                subscription.Status__c = 'Active';
+                subscription.Status__c = Constants.SUBSCRIPTION_ACTIVE;
             }else if (subscription.Expiration_Date__c == Date.today()) {
-                subscription.Status__c = 'Expired';
+                subscription.Status__c = Constants.SUBSCRIPTION_EXPIRED;
             }
         }
     }
