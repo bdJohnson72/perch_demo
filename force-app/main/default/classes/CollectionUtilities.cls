@@ -3,11 +3,16 @@
  */
 
 public with sharing class CollectionUtilities {
-
-    public static Set<Id> buildIdsSet(List<SObject> sObjects, SObjectField field){
+    /**
+     * @param sObjects List of SOBject to filter
+     * @param idField ID field field that will be added to the set
+     *
+     * @return Set of IDs
+     */
+    public static Set<Id> buildIdsSet(List<SObject> sObjects, SObjectField IdField){
         Set<Id> results = new Set<Id>();
         for(SObject sobj : sObjects){
-            results.add((Id)sobj.get(field));
+            results.add((Id)sobj.get(IdField));
         }
         return results;
     }

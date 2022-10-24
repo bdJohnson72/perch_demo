@@ -4,7 +4,6 @@
 
 public with sharing class SubscriptionUpdateScheduler implements Schedulable{
 
-
     public void execute(SchedulableContext sc) {
         Database.executeBatch(new SubscriptionUpdateBatch());
     }

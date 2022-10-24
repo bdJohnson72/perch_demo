@@ -8,15 +8,13 @@ public with sharing class CollectionUtilities_Tests {
     @IsTest
     static void itShouldBuildSet(){
         //given
-        Account acc1 = new Account(Name = 'Test Acc1');
-        Account acc2 = new Account(Name = 'Test Acc2');
-        Account acc3 = new Account(Name = 'Test Acc1');
+        Account acc1 = new Account(Name = 'Test Acc1', Id = fflib_IDGenerator.generate(Account.SObjectType));
+        Account acc2 = new Account(Name = 'Test Acc2', Id = fflib_IDGenerator.generate(Account.SObjectType));
+        Account acc3 = new Account(Name = 'Test Acc3', Id = fflib_IDGenerator.generate(Account.SObjectType));
         //when
-        Set<Object> accNameSet = CollectionUtilities.buildSet(new List<SObject>{acc1, acc2, acc3}, Account.Name);
+        Set<Id> accountIds = CollectionUtilities.buildIdsSet(new List<SObject>{acc1, acc2, acc3}, Account.Id);
         //then
-        System.debug(accNameSet);
-        Assert.isTrue(accNameSet.size() == 2, 'It should remove the duplicate name');
+        Assert.isTrue(accountIds.size() == 3, 'It should have built a set with 3 Ids');
     }
-
 
 }

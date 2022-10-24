@@ -65,6 +65,12 @@ public virtual class TriggerHandler {
             }
         }
     }
+    /**
+     * @description implement SObject specific validation on before inert
+     */
+    protected virtual void validateBeforeInsert(){}
+
+    protected virtual void validateBeforeUpdate(){}
 
     public void setMaxLoopCount(Integer max) {
         String handlerName = getHandlerName();
@@ -174,9 +180,13 @@ public virtual class TriggerHandler {
 
     // context-specific methods for override
     @TestVisible
-    protected virtual void beforeInsert(){}
+    protected virtual void beforeInsert(){
+        validateBeforeInsert();
+    }
     @TestVisible
-    protected virtual void beforeUpdate(){}
+    protected virtual void beforeUpdate(){
+        validateBeforeUpdate();
+    }
     @TestVisible
     protected virtual void beforeDelete(){}
     @TestVisible

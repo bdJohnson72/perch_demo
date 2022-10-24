@@ -4,7 +4,7 @@
 
 public with sharing class SubscriptionSelector {
 
-    public static List<Subscription__c> getExistingSubscriptionsByCustomerAndFarmId(Set<Id> customerIds, Set<Id> solarFarmIds) {
+    public  List<Subscription__c> getExistingSubscriptionsByCustomerAndFarmId(Set<Id> customerIds, Set<Id> solarFarmIds) {
         return [SELECT Id, Expiration_Date__c, Start_Date__c, Customer__c
         FROM Subscription__c
                 WHERE Customer__c IN: customerIds

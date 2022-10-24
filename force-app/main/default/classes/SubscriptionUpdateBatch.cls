@@ -10,10 +10,11 @@ public with sharing class SubscriptionUpdateBatch implements Database.Batchable<
 
     public void execute(Database.BatchableContext param1, List<Subscription__c> scope) {
         updateStatus(scope);
-        update scope;
+        doInsert(scope);
     }
 
     public void finish(Database.BatchableContext param1) {
+        // email results
     }
 
     public Iterable<SObject> start(Database.BatchableContext bc) {
@@ -21,13 +22,25 @@ public with sharing class SubscriptionUpdateBatch implements Database.Batchable<
     }
 
     @TestVisible
-    private void updateStatus(List<Subscription__c> subscriptions) {
+    private  void updateStatus(List<Subscription__c> subscriptions) {
         for(Subscription__c subscription : subscriptions) {
             if (subscription.Start_Date__c == Date.today()) {
                 subscription.Status__c = 'Active';
             }else if (subscription.Expiration_Date__c == Date.today()) {
                 subscription.Status__c = 'Expired';
             }
+        }
+    }
+
+    @TestVisible
+    private static void doInsert(List<Subscription__c> recordsToUpdate){
+        //TODO  implement actual DML or UOW for mocking
+        try {
+            update recordsToUpdate;
+        } catch (Exception e) {
+            //TODO implement error handling framework
+            System.debug('Exception in batch ' + e.getMessage());
+            System.debug(e.getStackTraceString());
         }
     }
 }
